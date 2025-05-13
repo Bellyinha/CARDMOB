@@ -1,24 +1,15 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Button,
-    Image,
-    TextInput,
-    FlatList,
+import { StyleSheet, Text, View, Button, Image, TextInput, FlatList,
 } from 'react-native';
-import List from './components/List';
+
+import Inputs from './components/Inputs';
 
 export default function App() {
 
     return (
         <View style={styles.container}>
-            <List/> 
-            <View style={styles.redbox} />
-            <View style={styles.bluebox} />
-            <View style={styles.blackbox} />
+            <Inputs/> 
         </View>
     );
 }
@@ -32,22 +23,4 @@ const styles = StyleSheet.create({
         height: 600,
         marginTop: 150,
     },
-    redbox: {
-        backgroundColor: 'lightcoral',
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-    },
-    bluebox: {
-        backgroundColor: 'lightblue',
-        width: 100,
-        height: 100,
-    },
-    blackbox: {
-        backgroundColor: 'lightslategrey',
-        width: 100,
-        height: 100,
-    },
 });
-
-// onPress = OnClick
