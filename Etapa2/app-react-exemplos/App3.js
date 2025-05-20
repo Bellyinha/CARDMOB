@@ -1,14 +1,15 @@
-import React from 'react';
-import { StyleSheet, View
+import React, { useState } from 'react';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View, Button, Image, TextInput, FlatList,
 } from 'react-native';
 
-import ScrollViewExample from './components/ScrollViewExample';
+import Inputs from './components/Inputs';
 
 export default function App() {
 
     return (
         <View style={styles.container}>
-            <ScrollViewExample />
+            <Inputs/> 
         </View>
     );
 }
@@ -18,6 +19,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: 'lightgray',
         height: 600,
         marginTop: 150,
     },
