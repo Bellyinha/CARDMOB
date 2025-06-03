@@ -5,13 +5,12 @@ import { StyleSheet, Text, View, Button, Image, TextInput, FlatList, Alert } fro
 const BASE_URL = 'http://10.81.205.29:3000';
 
 export default function App() {
+    // excluir counter
     // CRUD em memória
     const [items, setItems] = useState([]);
     const [text, setText] = useState('');
     const [editItemId, setEditItemId] = useState(null);
     const [editItemText, setEditItemText] = useState('');
-    const [quantidade, setQuantidade] = useState(0);
-    const [editQuantidade, setEditQuantidade] = useState(0);
     // loading ... efeito de carregamento...
     const [loading, setLoading] = useState(false); 
 
@@ -20,7 +19,7 @@ export default function App() {
         setLoading(true);
         try {
             // executa o que precisa, se der erro, vai para o catch
-            const response = await fetch(`${BASE_URL}/compras`);
+            const response = await fetch(`${BASE_URL}/items`);
             const data = await response.json();
             console.log(JSON.stringify(data))
             setItems(data);
@@ -37,17 +36,16 @@ export default function App() {
     }, []) 
 
     const addItem = async () => {
-        if (text.trim() === '' || quantidade.trim() === '') {
-            Alert.alert('Erro', 'Preencha ambos os campos.');
+        if (text.trim() === '') {
             return;
         }
         try {
-            const response =  await fetch(`${BASE_URL}/compras`, {
+            const response =  await fetch(`${BASE_URL}/items`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text: text.trim(), quantidade: quantidade.trim() }),
+                body: JSON.stringify({ text: text.trim() }),
             })
             if (response.ok) {
                 await fetchItems();
@@ -63,18 +61,17 @@ export default function App() {
     // Update
     const updateItem = async (id) => {
         try {
-            const response = await fetch(`${BASE_URL}/compras/${id}`, {
+            const response = await fetch(`${BASE_URL}/items/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ text: editItemText, quantidade: editQuantidade }),
+                body: JSON.stringify({ text: editItemText }),
             });
             if (response.ok) {
                 await fetchItems();
                 setEditItemId(null);
                 setEditItemText('');
-                setEditQuantidade(0);
             } else {
                 console.error('Failed to update item:', response.status);
             }
@@ -96,7 +93,7 @@ export default function App() {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            const response = await fetch(`${BASE_URL}/compras/${id}`, {
+                            const response = await fetch(`${BASE_URL}/items/${id}`, {
                                 method: 'DELETE',
                             });
                             if (response.ok) {
@@ -120,8 +117,7 @@ export default function App() {
         if (item.id != editItemId) {
             return (
                 <View style={styles.item}>
-                    <Text style={styles.itemText}>Item: {item.text}</Text>
-                    <Text style={styles.itemText}>Quantidade: {item.quantidade}</Text>
+                    <Text style={styles.itemText}>{item.text}</Text>
                     <View style={styles.buttons}>
                         <Button
                             title="Edit"
@@ -146,15 +142,7 @@ export default function App() {
                         style={styles.editInput}
                         onChangeText={setEditItemText}
                         value={editItemText}
-                        placeholder="Enter item name"
                         autoFocus
-                    />
-                    <TextInput
-                        style={styles.editInput}
-                        onChangeText={setEditQuantidade}
-                        value={editQuantidade.toString()}
-                        placeholder="Enter quantity"
-                        keyboardType="numeric"
                     />
                     <Button
                         title="Update"
@@ -172,14 +160,7 @@ export default function App() {
                 style={styles.input}
                 value={text}
                 onChangeText={setText}
-                placeholder="Enter name item"
-            />
-            <TextInput
-                style={styles.input}
-                value={quantidade}
-                onChangeText={setQuantidade}
-                placeholder="Enter quantity"
-                keyboardType="numeric"
+                placeholder="Enter text item"
             />
             <Button title="Add Item" onPress={addItem} color={'deepskyblue'} />
             <FlatList
@@ -188,6 +169,12 @@ export default function App() {
                 keyExtractor={(item) => item.id} // retorna o id do item
                 style={styles.list}
             />
+            <Text style={styles.text}>Hello World!</Text>
+            <Image
+                source={{ uri: 'https://picsum.photos/200' }}
+                style={{ width: 200, height: 200 }}
+            />
+
             <StatusBar style="auto" />
         </View>
     );
