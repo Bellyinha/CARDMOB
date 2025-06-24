@@ -2,18 +2,16 @@ import React, { useState, useEffect, use } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image, TextInput, FlatList, Alert } from 'react-native';
 
-const BASE_URL = 'http://10.81.205.29:5000';
+const BASE_URL = 'http://10.81.205.29:3000';
 
 export default function App() {
     // CRUD em memória
     const [items, setItems] = useState([]);
-    const [name, setName] = useState('');
+    const [text, setText] = useState('');
     const [editItemId, setEditItemId] = useState(null);
-    const [editItemName, setEditItemName] = useState('');
-    const [price, setPrice] = useState(0);
-    const [editPrice, setEditPrice] = useState(0);
-    const [description, setDescription] = useState('');
-    const [editDescription, setEditDescription] = useState('');
+    const [editItemText, setEditItemText] = useState('');
+    const [quantidade, setQuantidade] = useState(0);
+    const [editQuantidade, setEditQuantidade] = useState(0);
     // loading ... efeito de carregamento...
     const [loading, setLoading] = useState(false); 
 
@@ -22,10 +20,10 @@ export default function App() {
         setLoading(true);
         try {
             // executa o que precisa, se der erro, vai para o catch
-            const response = await fetch(`${BASE_URL}/api/catalog`);
+            const response = await fetch(`${BASE_URL}/compras`);
             const data = await response.json();
             console.log(JSON.stringify(data))
-            setItems(data.catalog);
+            setItems(data);
         } catch (error) {
             // quando der erro
             console.error('Error fetching items:', error);
@@ -39,17 +37,17 @@ export default function App() {
     }, []) 
 
     const addItem = async () => {
-        if (name.trim() === '' || price.trim() === '' || description.trim() === '') {
+        if (text.trim() === '' || quantidade.trim() === '') {
             Alert.alert('Erro', 'Preencha ambos os campos.');
             return;
         }
         try {
-            const response =  await fetch(`${BASE_URL}/api/catalog`, {
+            const response =  await fetch(`${BASE_URL}/compras`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: name.trim(), price: price.trim(), description: description.trim() }),
+                body: JSON.stringify({ text: text.trim(), quantidade: quantidade.trim() }),
             })
             if (response.ok) {
                 await fetchItems();
@@ -65,24 +63,18 @@ export default function App() {
     // Update
     const updateItem = async (id) => {
         try {
-            const fValue = parseFloat(editPrice)
-            const response = await fetch(`${BASE_URL}/api/catalog/${id}`, {
-                method: 'PATCH',
+            const response = await fetch(`${BASE_URL}/compras/${id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    name: editItemName,
-                    price: fValue,
-                    description: editDescription,
-                }),
+                body: JSON.stringify({ text: editItemText, quantidade: editQuantidade }),
             });
             if (response.ok) {
                 await fetchItems();
                 setEditItemId(null);
-                setEditItemName('');
-                setEditPrice(0);
-                setEditDescription('');
+                setEditItemText('');
+                setEditQuantidade(0);
             } else {
                 console.error('Failed to update item:', response.status);
             }
@@ -104,12 +96,9 @@ export default function App() {
                     text: 'Delete',
                     onPress: async () => {
                         try {
-                            const response = await fetch(
-                                `${BASE_URL}/api/catalog/${id}`,
-                                {
-                                    method: 'DELETE',
-                                }
-                            );
+                            const response = await fetch(`${BASE_URL}/compras/${id}`, {
+                                method: 'DELETE',
+                            });
                             if (response.ok) {
                                 await fetchItems();
                             } else {
@@ -131,15 +120,8 @@ export default function App() {
         if (item.id != editItemId) {
             return (
                 <View style={styles.item}>
-                    <Image
-                        source={{ uri: item.image }}
-                        style={{ width: 100, height: 100 }}
-                    />
-                    <Text style={styles.itemText}>Name: {item.name}</Text>
-                    <Text style={styles.itemText}>Price: {item.price}</Text>
-                    <Text style={styles.itemText}>
-                        Description: {item.description}
-                    </Text>
+                    <Text style={styles.itemText}>Item: {item.text}</Text>
+                    <Text style={styles.itemText}>Quantidade: {item.quantidade}</Text>
                     <View style={styles.buttons}>
                         <Button
                             title="Edit"
@@ -162,22 +144,17 @@ export default function App() {
                 <View style={styles.item}>
                     <TextInput
                         style={styles.editInput}
-                        onChangeText={setEditItemName}
-                        value={editItemName}
+                        onChangeText={setEditItemText}
+                        value={editItemText}
                         placeholder="Enter item name"
+                        autoFocus
                     />
                     <TextInput
                         style={styles.editInput}
-                        onChangeText={setEditPrice}
-                        value={editPrice}
-                        placeholder="Enter price"
+                        onChangeText={setEditQuantidade}
+                        value={editQuantidade.toString()}
+                        placeholder="Enter quantity"
                         keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.editInput}
-                        onChangeText={setEditDescription}
-                        value={editDescription}
-                        placeholder="Enter description"
                     />
                     <Button
                         title="Update"
@@ -193,23 +170,16 @@ export default function App() {
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
-                value={name}
-                onChangeText={setName}
+                value={text}
+                onChangeText={setText}
                 placeholder="Enter name item"
             />
             <TextInput
                 style={styles.input}
-                value={price}
-                onChangeText={setPrice}
-                placeholder="Enter price"
+                value={quantidade}
+                onChangeText={setQuantidade}
+                placeholder="Enter quantity"
                 keyboardType="numeric"
-            />
-            <TextInput
-                style={styles.input}
-                value={description}
-                onChangeText={setDescription}
-                placeholder="Enter description"
-                autoFocus
             />
             <Button title="Add Item" onPress={addItem} color={'deepskyblue'} />
             <FlatList
@@ -251,6 +221,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     item: {
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 10,
@@ -273,3 +244,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
 });
+
+// onPress = OnClick
