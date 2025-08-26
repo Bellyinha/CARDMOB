@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-// import HomeScreen from './src/screens/HomeScreen';
 import { ThemeProvider } from './src/contexts/ThemeContext';
+// import HomeScreen from './src/screens/HomeScreen';
 import RootNavigator from './src/navigation/RootNavigator';
+import { AuthProvider } from './src/contexts/AuthContext';
 
 export default function App() {
     return (
         <ThemeProvider>
-            {/* <HomeScreen/> */}
-            <RootNavigator />
+            <AuthProvider>
+                <RootNavigator />
+            </AuthProvider>
         </ThemeProvider>
     );
 }
