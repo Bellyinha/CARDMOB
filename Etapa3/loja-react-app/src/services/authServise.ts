@@ -1,15 +1,17 @@
-import Config from "react-native-config";
+import Constants from 'expo-constants';
 
-const API_URL = 'http://10.81.205.29:5000';
+// const API_URL = Configs.API_URL;
+// const API_URL = 'http://10.81.205.29:5000';
+const { apiUrl } = Constants.expoConfig?.extra || {};
 
 export async function fakeLogin(email: string, password: string): Promise<string> {
-    console.log(API_URL);
+    console.log(apiUrl);
     if (email === 'teste@example.com' && password === '123') {
         return Promise.resolve('fake-jwt-token');
     }
     if (email === 'admin@example.com' && password === 'admin123') {
         try {
-            const response = await fetch(`${API_URL}/api/users/login`, {
+            const response = await fetch(`${apiUrl}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -33,9 +35,9 @@ export async function requestLogin(
     email: string,
     password: string
 ): Promise<string> {
-    console.log(API_URL);
+    console.log(apiUrl);
         try {
-            const response = await fetch(`${API_URL}/api/users/login`, {
+            const response = await fetch(`${apiUrl}/api/users/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
