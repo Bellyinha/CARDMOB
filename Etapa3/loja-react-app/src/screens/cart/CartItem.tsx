@@ -1,40 +1,42 @@
 import React, { useContext } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
+import { useShop } from '../../contexts/ShopContext';
+
 const CartItem = ({ item }: any) => {
-  //Para fazer: implementar o context para persistir dados do carrinho
+    //Para fazer: implementar o context para persistir dados do carrinho
+    const { addToCart } = useShop();
 
-  const handleRemove = () => {
-    console.log('item excluído');
-  }
+    const handleRemove = () => {
+        console.log('item excluído');
+    };
 
-  return (
-    <View style={styles.container}>
-      <Image source={{ uri: item.image }} style={styles.image}/>
-      <View>
-        <Text style={styles.name}>{item.name}</Text>
-        <View style={styles.quantity}>
-            <Text style={styles.price}>R$ {(item.price * item.quantity).toFixed(2)}</Text>
+    return (
+        <View style={styles.container}>
+            <Image source={{ uri: item.image }} style={styles.image} />
+            <View>
+                <Text style={styles.name}>{item.name}</Text>
+                <View style={styles.quantity}>
+                    <Text style={styles.price}>R$ {(item.price * item.quantity).toFixed(2)}</Text>
 
-            <TouchableOpacity onPress={() => handleRemove()} style={styles.button}>
-                <Text style={styles.buttonText}>-</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity onPress={() => addToCart(item)} style={styles.button}>
+                        <Text style={styles.buttonText}>-</Text>
+                    </TouchableOpacity>
 
-                <Text style={styles.quantityValue}>{item.quantity}</Text>
+                    <Text style={styles.quantityValue}>{item.quantity}</Text>
 
-            <TouchableOpacity onPress={() => handleRemove()} style={styles.button}>
-                <Text style={styles.buttonText}>+</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity onPress={() => addToCart(item)} style={styles.button}>
+                        <Text style={styles.buttonText}>+</Text>
+                    </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => handleRemove()} style={styles.button}>
-                <Text style={styles.buttonText}>Remover</Text>
-            </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleRemove()} style={styles.button}>
+                        <Text style={styles.buttonText}>Remover</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         </View>
-      </View>
-    </View>
-  );
-
-}
+    );
+};
 export default CartItem;
 
 const styles = StyleSheet.create({

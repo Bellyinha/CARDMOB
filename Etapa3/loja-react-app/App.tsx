@@ -5,12 +5,15 @@ import { ThemeProvider } from './src/contexts/ThemeContext';
 // import HomeScreen from './src/screens/HomeScreen';
 import RootNavigator from './src/navigation/RootNavigator';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { ShopProvider } from './src/contexts/ShopContext';
 
 export default function App() {
     return (
         <ThemeProvider>
             <AuthProvider>
-                <RootNavigator />
+                <ShopProvider>
+                    <RootNavigator />
+                </ShopProvider>
             </AuthProvider>
         </ThemeProvider>
     );
