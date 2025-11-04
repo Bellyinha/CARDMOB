@@ -74,4 +74,8 @@ const styles = StyleSheet.create({
         width: 100,
     },
     text: { fontSize: 14 }, // novo
-});
+}
+);
+
+
+
