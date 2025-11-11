@@ -12,9 +12,10 @@ import {
 } from 'react-native';
 
 import { useShop } from '../../contexts/ShopContext';
+import { postOrder } from '../../services/catalogServise';
 
 const CheckoutScreen = ( {navigation}: any) => {
-    const { getTotalPrice } = useShop();
+    const { getTotalPrice, clearCart, cartItems, lastOrderInfo } = useShop();
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [customer, setCustomer] = useState('');
@@ -26,9 +27,11 @@ const CheckoutScreen = ( {navigation}: any) => {
             customerPhone: phone,
             customerAddress: address,
         }
+        const orderInfo = await postOrder(custumerInfo, cartItems);
+        lastOrderInfo(orderInfo);
         alert('Pedido confirmado!');
         clearCart();
-        navigation.navigate('Catalog');
+        navigation.replace('Tabs', {screen: 'Catalog'});
     }
 
     return (

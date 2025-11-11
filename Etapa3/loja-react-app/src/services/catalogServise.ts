@@ -15,3 +15,26 @@ export async function getCatalog(): Promise<any[]> {
         return Promise.reject('Erro ao obter produtos');
     }
 }
+
+export async function postOrder(customer: any, cartItems: any[]): Promise<any> {
+    try {
+        const orderData = {...customer, items: cartItems}
+        const response = await fetch(`${apiUrl}/api/orders`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+            },
+            body: JSON.stringify(orderData),
+        });
+        if (!response.ok) {
+            throw new Error('Erro na requisição');
+        }
+        const data = await response.json();
+        console.log(data);
+        return data;
+    }
+    catch (error) {
+        console.error(error);
+        return Promise.reject('Erro ao enviar o pedido');
+    }
+}
