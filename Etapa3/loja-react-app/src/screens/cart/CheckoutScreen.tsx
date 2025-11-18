@@ -22,16 +22,18 @@ const CheckoutScreen = ( {navigation}: any) => {
     const [paymentOption, setPaymentOption] = useState('');
 
     const confirmOrder = async () => {
-        const custumerInfo = {
+        const customerInfo = {
             customerName: customer,
             customerPhone: phone,
             customerAddress: address,
         }
-        const orderInfo = await postOrder(custumerInfo, cartItems);
+        const orderInfo = await postOrder(customerInfo, cartItems);
         lastOrderInfo(orderInfo);
         alert('Pedido confirmado!');
         clearCart();
-        navigation.replace('Tabs', {screen: 'Catalog'});
+        console.log(customerInfo);
+        // navigation.replace('Tabs', {screen: 'Catalog'});
+        navigation.navigate('OrderInfo');
     }
 
     return (

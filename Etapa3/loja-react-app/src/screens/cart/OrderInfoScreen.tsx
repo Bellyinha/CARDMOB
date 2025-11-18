@@ -3,9 +3,12 @@ import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
 
 import { useShop } from '../../contexts/ShopContext';
 
+import Constants from 'expo-constants';
+
 const OrderInfoScreen = ({ navigation }: any) => {
     const { orderInfo } = useShop();
     const [orderData, setOrderData] = useState<any[]>([]);
+    const { apiUrl } = Constants.expoConfig?.extra || {};
 
     const loadOrder = () => {
         console.log(orderInfo);
@@ -21,12 +24,12 @@ const OrderInfoScreen = ({ navigation }: any) => {
                     label: 'Total',
                     value: `R$ ${orderInfo.totalPrice.toFixed(2)}`,
                 },
-                ...orderInfo.orderOffering.map((item) => ({
+                ...orderInfo.orderOffering.map((item: any) => ({
                     label: item.offering.name,
                     value: `x${
                         item.quantity
                     } - subtotal: R$ ${item.subtotal.toFixed(2)}`,
-                    image: item.offering.image,
+                    image: `${apiUrl}/${item.offering.image}`,
                     isOrderItem: true,
                 })),
             ];
@@ -57,7 +60,9 @@ const OrderInfoScreen = ({ navigation }: any) => {
         return (
             <View style={styles.infoRow}>
                 <Text style={styles.label}>{item.label}</Text>
-                <Text style={styles.value}>{item.value}</Text>
+                <Text style={item.isStatus ? styles.statusValue : styles.value}>
+                    {item.value}
+                </Text>
             </View>
         );
     };
@@ -70,7 +75,7 @@ const OrderInfoScreen = ({ navigation }: any) => {
                     <FlatList
                         data={orderData}
                         renderItem={renderItem}
-                        keyExtractor={(item, (index) => index.toString())}
+                        keyExtractor={(item: any, index: number) => index.toString()}
                         contentContainerStyle={styles.container}
                     />
                 </View>
@@ -85,16 +90,53 @@ const OrderInfoScreen = ({ navigation }: any) => {
 export default OrderInfoScreen;
 
 const styles = StyleSheet.create({
-    container: {},
-    itemRow: {},
-    itemImage: {
-        height: 80,
-        width: 80,
+    container: {
+        padding: 16,
+        backgroundColor: '#fff',
     },
-    itemInfo: {},
-    itemName: {},
-    infoRow: {},
-    label: {},
+    itemRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 4,
+        paddingVertical: 8,
+        borderBottomWidth: 1,
+        borderColor: '#ddd',
+    },
+    itemImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 8,
+        marginRight: 10,
+    },
+    itemInfo: {
+        flex: 1,
+    },
+    itemName: {
+        fontWeight: 'bold',
+    },
+    infoRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 4,
+        paddingVertical: 4,
+    },
+    label: {
+        fontWeight: 'bold',
+    },
     value: {},
-    title: {},
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 12,
+    },
+    statusValue: {
+        flex: 1,
+        textAlign: 'left',
+        fontWeight: 'bold',
+        color: 'orange',
+        backgroundColor: '#fff3cd',
+        padding: 4,
+        borderRadius: 5,
+    },
 });
+    
