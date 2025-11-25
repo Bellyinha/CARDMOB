@@ -16,7 +16,7 @@ function ProfileScreen({ navigation }: any) {
         const fetchProfile = async () => {
             try {
                 console.log(userData)
-                const user = await requestProfileById(1);
+                const user = await requestProfileById(userData?.id);
                 console.log(user);
                 setUser(user);
                 console.log('Carregou o usuário!');
