@@ -1,10 +1,10 @@
 import { NavigatorScreenParams } from '@react-navigation/native';
 
 export type TabParamList = {
-    Catalog: undefined,
-    Cart: undefined,
-    Settings: undefined,
-    Register: undefined,
+    Catalog: undefined;
+    Cart: undefined;
+    Settings: undefined;
+    Register: undefined;
 };
 
 export type RootStackParamList = {
@@ -16,13 +16,14 @@ export type RootStackParamList = {
 };
 
 export type AuthTabParamList = {
-    Home: undefined,
-    Settings: undefined,
+    Home: undefined;
+    Settings: undefined;
+    Orders: undefined;
 };
 
 export type AuthStackParamList = {
     Tabs: NavigatorScreenParams<AuthTabParamList>;
-    Details: { itemId: number};
+    Details: { itemId: number };
     Checkout: undefined;
     OrderInfo: undefined;
 };

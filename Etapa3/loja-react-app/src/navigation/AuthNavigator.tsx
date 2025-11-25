@@ -3,12 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AuthStackParamList, AuthTabParamList } from './types';
 
-// Telas do app - área logada
+// Telas do app - área logada.
 import HomeScreen from '../screens/HomeScreen';
+// importar depois que implementar: DetailsScreen, SettingsScreen
 import ProfileScreen from '../screens/auth/ProfileScreen';
 import CheckoutScreen from '../screens/cart/CheckoutScreen';
 import OrderInfoScreen from '../screens/cart/OrderInfoScreen';
-// importar depois que implementar: DetailsScreen, SettingsScreen
+import ManagerOrdersScreen from '../screens/auth/ManagerOrdersScreen';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 const Tab = createBottomTabNavigator<AuthTabParamList>();
@@ -22,6 +23,11 @@ function AuthTabNavigator() {
                 options={{ title: 'Área Logada' }}
             />
             <Tab.Screen name="Settings" component={HomeScreen} />
+            <Tab.Screen
+                name="Orders"
+                component={ManagerOrdersScreen}
+                options={{ title: 'Pedidos' }}
+            />
         </Tab.Navigator>
     );
 }
@@ -34,11 +40,10 @@ function AuthStackNavigator() {
                 component={AuthTabNavigator}
                 options={{ headerShown: false }}
             />
-
             <Stack.Screen
                 name="Details"
                 component={HomeScreen}
-                options={{ title: 'Details' }}
+                options={{ title: 'Detalhes' }}
             />
             <Stack.Screen
                 name="Checkout"
