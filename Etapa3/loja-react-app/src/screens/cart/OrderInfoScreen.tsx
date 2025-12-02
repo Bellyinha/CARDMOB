@@ -1,53 +1,42 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import React, { useContext, useState, useEffect } from "react";
+import { View, Text, Image, StyleSheet, FlatList} from 'react-native';
 
-import { useShop } from '../../contexts/ShopContext';
+import Constants from 'expo-constants';  // novo
 
-import Constants from 'expo-constants';
+import { useShop } from "../../contexts/ShopContext";
 
-const OrderInfoScreen = ({ navigation }: any) => {
+const OrderInfoScreen = ({navigation}: any) => {
     const { orderInfo } = useShop();
-    const [orderData, setOrderData] = useState<any[]>([]);
-    const { apiUrl } = Constants.expoConfig?.extra || {};
+    const [orderData, setOrderData ] = useState<any[]>([]);
+    const { apiUrl } = Constants.expoConfig?.extra || {}; // novo
 
     const loadOrder = () => {
         console.log(orderInfo);
         if (orderInfo.id) {
             const lastOrder = [
-                { label: '', value: orderInfo.status, isStatus: true },
-                { label: 'Nome', value: orderInfo.customerName },
-                {
-                    label: 'Endereço de entrega',
-                    value: orderInfo.customerAddress,
-                },
-                {
-                    label: 'Total',
-                    value: `R$ ${orderInfo.totalPrice.toFixed(2)}`,
-                },
+                {label: '', value: orderInfo.status, isStatus: true},
+                {label: 'Nome', value: orderInfo.customerName},
+                {label: 'Endereço de entrega', value: orderInfo.customerAddress},
+                {label: 'Total', value: `R$ ${orderInfo.totalPrice.toFixed(2)}`},
                 ...orderInfo.orderOffering.map((item: any) => ({
                     label: item.offering.name,
-                    value: `x${
-                        item.quantity
-                    } - subtotal: R$ ${item.subtotal.toFixed(2)}`,
+                    value: `x${item.quantity} - subtotal: R$ ${item.subtotal.toFixed(2)}`,
                     image: `${apiUrl}/${item.offering.image}`,
                     isOrderItem: true,
-                })),
+                }))
             ];
             setOrderData(lastOrder);
         }
-    };
+    }
     useEffect(() => {
         loadOrder();
     }, []);
 
-    const renderItem = ({ item }: any) => {
+    const renderItem = ({item}: any) => {
         if (item.isOrderItem) {
             return (
                 <View style={styles.itemRow}>
-                    <Image
-                        source={{ uri: item.image }}
-                        style={styles.itemImage}
-                    />
+                    <Image source={{ uri: item.image }} style={styles.itemImage} />
                     <View style={styles.itemInfo}>
                         <Text style={styles.itemName}>
                             {item.label} ({item.value})
@@ -59,20 +48,22 @@ const OrderInfoScreen = ({ navigation }: any) => {
 
         return (
             <View style={styles.infoRow}>
-                <Text style={styles.label}>{item.label}</Text>
-                <Text style={item.isStatus ? styles.statusValue : styles.value}>
-                    {item.value}
+                <Text style={styles.label}>
+                    {item.label}
                 </Text>
+                <Text style={item.isStatus ? styles.statusValue : styles.value}>{item.value}</Text>
             </View>
         );
-    };
+    }
 
-    return (
+    return ( 
         <View style={styles.container}>
             {orderInfo.id ? (
-                <View>
-                    <Text style={styles.title}>N° {orderInfo.id}</Text>
-                    <FlatList
+                <View> 
+                    <Text style={styles.title}>
+                        Nº {orderInfo.id}
+                    </Text>
+                    <FlatList 
                         data={orderData}
                         renderItem={renderItem}
                         keyExtractor={(item: any, index: number) => index.toString()}
@@ -81,12 +72,14 @@ const OrderInfoScreen = ({ navigation }: any) => {
                 </View>
             ) : (
                 <View style={styles.infoRow}>
-                    <Text style={styles.title}></Text>
+                    <Text style={styles.title}>
+                        Nenhum pedido encontrado.
+                    </Text>
                 </View>
             )}
         </View>
     );
-};
+}
 export default OrderInfoScreen;
 
 const styles = StyleSheet.create({
@@ -112,13 +105,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     itemName: {
-        fontWeight: 'bold',
+        fontWeight: 'bold'
     },
     infoRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 4,
-        paddingVertical: 4,
+        paddingVertical: 4
     },
     label: {
         fontWeight: 'bold',
@@ -139,4 +132,3 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
 });
-    

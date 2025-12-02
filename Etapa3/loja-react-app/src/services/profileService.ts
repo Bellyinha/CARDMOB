@@ -1,4 +1,4 @@
-import Constants from 'expo-constants';
+import Constants from "expo-constants";
 
 const { apiUrl } = Constants.expoConfig?.extra || {};
 
@@ -10,7 +10,8 @@ export async function requestProfileById(id: number): Promise<[]> {
             data.image = `${apiUrl}/uploads/placeholder.png`;
         }
         return Promise.resolve(data);
-    } catch (error) {
+    }
+    catch (error) {
         console.error(error);
         return Promise.reject(error);
     }

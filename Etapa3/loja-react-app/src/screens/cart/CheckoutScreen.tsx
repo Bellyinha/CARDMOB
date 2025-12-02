@@ -1,18 +1,17 @@
-import React, { useState, useContext } from 'react';
-
-import {
+import React, { useState, useContext } from "react";
+import { 
     View,
     Text,
     TextInput,
     StyleSheet,
-    Platform, 
+    Platform,
     ScrollView,
     KeyboardAvoidingView,
-    Button
-} from 'react-native';
+    Button,
+} from "react-native";
 
-import { useShop } from '../../contexts/ShopContext';
-import { postOrder } from '../../services/catalogServise';
+import { useShop } from "../../contexts/ShopContext";
+import { postOrder } from "../../services/catalogService";
 
 const CheckoutScreen = ( {navigation}: any) => {
     const { getTotalPrice, clearCart, cartItems, lastOrderInfo } = useShop();
@@ -27,18 +26,21 @@ const CheckoutScreen = ( {navigation}: any) => {
             customerPhone: phone,
             customerAddress: address,
         }
+        // enviar para o backend 
+        // todo: implementar o serviço de "checkout"
         const orderInfo = await postOrder(customerInfo, cartItems);
         lastOrderInfo(orderInfo);
         alert('Pedido confirmado!');
         clearCart();
         console.log(customerInfo);
+        // navigation.navigate('Catalog');
         // navigation.replace('Tabs', {screen: 'Catalog'});
         navigation.navigate('OrderInfo');
     }
 
     return (
         <KeyboardAvoidingView
-            style={{ flex: 1 }}
+            style={{flex: 1}}
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
             <ScrollView contentContainerStyle={styles.container}>
@@ -47,15 +49,15 @@ const CheckoutScreen = ( {navigation}: any) => {
                     placeholder="Telefone"
                     value={phone}
                     onChangeText={setPhone}
-                    keyboardType="phone-pad"
+                    keyboardType="phone-pad" 
                 />
-                <TextInput
+                <TextInput 
                     style={styles.input}
                     placeholder="Nome completo"
                     value={customer}
                     onChangeText={setCustomer}
                 />
-                <TextInput
+                <TextInput 
                     style={styles.input}
                     placeholder="Endereço de entrega"
                     value={address}
@@ -63,34 +65,35 @@ const CheckoutScreen = ( {navigation}: any) => {
                 />
                 <Text style={styles.label}>Forma de pagamento</Text>
                 <View style={styles.paymentOption}>
-                    <Button
+                    <Button 
                         title="PIX"
                         onPress={() => setPaymentOption('PIX')}
                         color={paymentOption === 'PIX' ? '#007BFF' : '#DDD'}
                     />
-                    <Button
+                    <Button 
                         title="Cartão de débito"
                         onPress={() => setPaymentOption('Cartão de débito')}
                         color={paymentOption === 'Cartão de débito' ? '#007BFF' : '#DDD'}
                     />
-                    <Button
+                    <Button 
                         title="Cartão de crédito"
                         onPress={() => setPaymentOption('Cartão de crédito')}
                         color={paymentOption === 'Cartão de crédito' ? '#007BFF' : '#DDD'}
                     />
                 </View>
-                <Text style={styles.selectedPayment}> Pagar com: {paymentOption}</Text>
-                <Text style={styles.totalText}> Total a pagar: R$ {getTotalPrice()}</Text>
-                <Button
+                <Text style={styles.selectedPayment}>Pagar com: {paymentOption}</Text>
+                <Text style={styles.totalText}>Total a pagar: R$ {getTotalPrice()}</Text>
+                <Button 
                     title="Confirmar pedido"
                     onPress={confirmOrder}
-                    color='#28a275'
+                    color='#28A275'
                 />
             </ScrollView>
+
         </KeyboardAvoidingView>
     );
-}
 
+}
 export default CheckoutScreen;
 
 const styles = StyleSheet.create({
@@ -130,6 +133,6 @@ const styles = StyleSheet.create({
     selectedPayment: {
         fontSize: 16,
         marginVertical: 10,
-        textAlign: 'center',
+        textAlign: 'center'
     },
 });

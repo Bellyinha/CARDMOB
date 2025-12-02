@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import React, { useState, useEffect } from "react"; // alterado
+import { View, Text, FlatList, StyleSheet} from 'react-native';
 
-import CatalogCard from './CatalogCard';
+import CatalogCard from "./CatalogCard";
 
 // Todo: importar o serviço de recuperação do catalog
-import { getCatalog } from '../../services/catalogServise';
+import { getCatalog } from '../../services/catalogService'; // novo
 
-import { useShop } from '../../contexts/ShopContext';
+import { useShop } from "../../contexts/ShopContext";
 
-const CatalogScreen = ({ navigation }: any) => {
-    const [catalog, setCatalog] = useState<any[]>([]);
+const CatalogScreen = ({navigation} : any) => {
+    const [catalog, setCatalog] = useState<any[]>([]); // novo
     const { addToCart } = useShop();
 
+    // bloco novo
     useEffect(() => {
         const fetchCatalog = async () => {
             try {
-                const  data = await getCatalog();
+                const data = await getCatalog();
                 setCatalog(data);
             }
             catch (error) {
@@ -26,27 +27,27 @@ const CatalogScreen = ({ navigation }: any) => {
         console.log(catalog);
     }, []);
 
-    const handleBuyPress = (product: any) => {
+    const handleBuyPress = (product : any) => {
         // 1 - Adicionar ao carrinho
-        // 2 - Ir para a tela de carrinho
+        // 2 - Ir para a tela do carrinho
         addToCart(product);
         console.log(product);
     };
 
-    const renderItem = ({ item }: any) => (
-        <CatalogCard
-            product={item}
-            onBuyPress={() => handleBuyPress(item)}
+    const renderItem = ({ item }: any) => ( // alterado
+        <CatalogCard 
+            product={item} // alterado
+            onBuyPress={() => handleBuyPress(item)} // alterado
         />
     );
 
     return (
         <View style={styles.container}>
             <Text>Menu</Text>
-            <FlatList
-                data={catalog}
+            <FlatList 
+                data={catalog} // alterado
                 renderItem={renderItem}
-                keyExtractor={(item: any) => item.id}
+                keyExtractor={(item: any) => item.id.toString()} // alterado
             />
         </View>
     );
@@ -58,6 +59,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 15,
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#F8F8F8',
     }
 });
